@@ -5,8 +5,11 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"server": "nodemon index.ts",
-		"build": "rimraf bundle && webpack"
+		"watch:server": "webpack --watch --mode=development --env target=server --config webpack.config.js",
+		"watch": "rimraf bundle && npm run watch:server",
+		"serve": "concurrently \"npm run watch\" \"nodemon bundle/index.js\"",
+		"bundle:server": "webpack --mode=production",
+		"build": "rimraf bundle && npm run bundle:server"
 	},
 	"keywords": [],
 	"author": "",
@@ -16,9 +19,11 @@
 		"@types/express": "^4.17.14",
 		"@types/http-errors": "^1.8.2",
 		"@types/node": "^18.11.0",
+		"concurrently": "^7.5.0",
 		"filemanager-webpack-plugin": "^7.0.0",
 		"rimraf": "^3.0.2",
 		"ts-loader": "^9.4.1",
+		"tsconfig-paths-webpack-plugin": "^4.0.0",
 		"typescript": "^4.8.4",
 		"webpack": "^5.74.0",
 		"webpack-cli": "^4.10.0",
@@ -28,6 +33,7 @@
 		"body-parser": "^1.20.1",
 		"cors": "^2.8.5",
 		"dotenv": "^16.0.3",
+		"ejs": "^3.1.8",
 		"express": "^4.18.2",
 		"http-errors": "^2.0.0"
 	}

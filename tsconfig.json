@@ -1,11 +1,21 @@
 {
 	"compilerOptions": {
-		"sourceMap": true,
-		"strict": true,
+		// transpilation settings
 		"lib": ["ESNext"],
-		"esModuleInterop": true,
-		"target": "ES2015",
+		"module": "ESNext",
 		"moduleResolution": "Node",
-		"jsx": "react-jsx"
+		"target": "ESNext",
+
+		// dev tools
+		"sourceMap": true,
+
+		// features configuration
+		"esModuleInterop": true,
+		"strict": true,
+		"resolveJsonModule": true,
+
+		// filesystem
+		"baseUrl": "./",
+		"paths": {}
 	}
 }

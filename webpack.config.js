@@ -1,41 +1,56 @@
-const path = require("path");
-const nodeExternals = require("webpack-node-externals");
-const FileManagerPlugin = require("filemanager-webpack-plugin");
-const commonConfig = require("./config/webpack.config");
 const { merge } = require("webpack-merge");
+const commonConfig = require("./config/webpack.config");
+const FileManagerPlugin = require("filemanager-webpack-plugin");
+const nodeExternals = require("webpack-node-externals");
+const path = require("path");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
-module.exports = merge(commonConfig, {
-	target: "node",
-	externals: [nodeExternals()],
-	entry: path.join(__dirname, "index.ts"),
-	output: {
-		path: path.join(__dirname, "bundle/server"),
-		filename: "index.js",
-	},
-	plugins: [
-		new FileManagerPlugin({
-			events: {
-				onEnd: {
-					copy: [
-						{
-							source: path.join(__dirname, "views"),
-							destination: path.join(__dirname, "bundle/api/views"),
-						},
-						{
-							source: path.join(__dirname, "public"),
-							destination: path.join(__dirname, "bundle/api/public"),
-						},
-						{
-							source: path.join(__dirname, "package.json"),
-							destination: path.join(__dirname, "bundle/api/package.json"),
-						},
-						{
-							source: path.join(__dirname, ".env"),
-							destination: path.join(__dirname, "bundle/api/.env"),
-						},
-					],
+module.exports = (env, argv) =>
+	merge(commonConfig(env.target, argv.mode), {
+		target: "node",
+		node: {
+			__dirname: true,
+		},
+		experiments: {
+			topLevelAwait: true,
+		},
+		externals: [nodeExternals()],
+		entry: path.join(__dirname, "index.ts"),
+		output: {
+			path: path.join(__dirname, "bundle"),
+			filename: "index.js",
+		},
+		resolve: {
+			plugins: [
+				new TsconfigPathsPlugin({
+					configFile: path.join(__dirname, "tsconfig.json"),
+				}),
+			],
+		},
+		plugins: [
+			new FileManagerPlugin({
+				events: {
+					onEnd: {
+						copy: [
+							{
+								source: path.join(__dirname, "views"),
+								destination: path.join(__dirname, "bundle/views"),
+							},
+							{
+								source: path.join(__dirname, "public"),
+								destination: path.join(__dirname, "bundle/public"),
+							},
+							{
+								source: path.join(__dirname, "package.json"),
+								destination: path.join(__dirname, "bundle/package.json"),
+							},
+							{
+								source: path.join(__dirname, ".env"),
+								destination: path.join(__dirname, "bundle/.env"),
+							},
+						],
+					},
 				},
-			},
-		}),
-	],
-});
+			}),
+		],
+	});
