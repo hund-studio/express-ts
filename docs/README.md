@@ -1,5 +1,7 @@
 # 📦 express-ts
 
+![version](https://img.shields.io/github/package-json/v/hund-studio/express-ts)
+
 A minimal boilerplate for an Express app /w Typescript
 
 Ideal for API and server-side applications without UI.
